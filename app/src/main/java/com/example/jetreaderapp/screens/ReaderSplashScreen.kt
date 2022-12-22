@@ -39,7 +39,11 @@ fun ReaderSplashScreen(navController: NavHostController = NavHostController(Loca
                 .getInterpolation(it)
         }))
         delay(1000L)
-        navController.navigate(ReaderScreens.LoginScreen.name)
+        navController.navigate(ReaderScreens.LoginScreen.name) {
+            popUpTo(ReaderScreens.SplashScreen.name) {
+                inclusive = true
+            }
+        }
     }
 
     Surface(modifier = Modifier

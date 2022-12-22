@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JetReaderApp</string>
+    <string name="password_suggestion">Create a password that is at least 6 characters</string>
 </resources>
