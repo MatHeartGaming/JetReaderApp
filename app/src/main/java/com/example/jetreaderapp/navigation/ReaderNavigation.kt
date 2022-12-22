@@ -10,6 +10,7 @@ import com.example.jetreaderapp.screens.details.BookDetailsScreen
 import com.example.jetreaderapp.screens.home.Home
 import com.example.jetreaderapp.screens.login.ReaderLoginScreen
 import com.example.jetreaderapp.screens.search.BookSearchViewModel
+import com.example.jetreaderapp.screens.search.BooksSearchViewModel
 import com.example.jetreaderapp.screens.search.ReaderSearchScreen
 import com.example.jetreaderapp.screens.stats.ReaderStatsScreen
 
@@ -27,7 +28,7 @@ fun ReaderNavigation() {
             ReaderLoginScreen(navController = navController)
         }
         composable(route = ReaderScreens.SearchScreen.name) {
-            val viewModel = hiltViewModel<BookSearchViewModel>()
+            val viewModel = hiltViewModel<BooksSearchViewModel>()
             ReaderSearchScreen(navController = navController, viewModel)
         }
         composable(route = ReaderScreens.DetailScreen.name) {
