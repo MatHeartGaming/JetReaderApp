@@ -28,6 +28,7 @@ import com.example.jetreaderapp.components.LoadImage
 import com.example.jetreaderapp.components.ReaderAppBar
 import com.example.jetreaderapp.model.Item
 import com.example.jetreaderapp.model.MBook
+import com.example.jetreaderapp.navigation.ReaderScreens
 
 @Preview
 @Composable
@@ -54,7 +55,7 @@ viewModel: BooksSearchViewModel = hiltViewModel()) {
                     Log.d("On Search", "ReaderSearchScreen: $searchText")
                 }
 
-                RenderBookSearchList(viewModel.list)
+                RenderBookSearchList(viewModel.list, navController = navController)
             }
 
         }
@@ -91,17 +92,19 @@ fun SearchForm(
 }
 
 @Composable
-fun RenderBookSearchList(books: List<Item> = emptyList(), viewModel: BooksSearchViewModel = hiltViewModel()) {
+fun RenderBookSearchList(books: List<Item> = emptyList(),
+                         viewModel: BooksSearchViewModel = hiltViewModel(),
+navController: NavHostController) {
     if(viewModel.isLoading) {
         Column(Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator(Modifier.size(80.dp))
+            CircularProgressIndicator(Modifier.size(50.dp))
         }
     } else {
         LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)){
             items(books) {book->
-                BookItem(book)
+                BookItem(book, navController = navController)
             }
         }
     }
@@ -109,13 +112,19 @@ fun RenderBookSearchList(books: List<Item> = emptyList(), viewModel: BooksSearch
 }
 
 @Composable
-fun BookItem(book: Item) {
+fun BookItem(book: Item, navController: NavHostController) {
     Row(modifier = Modifier
         .padding(4.dp)
         .height(100.dp)
         .fillMaxWidth()
-        .clickable { }) {
-        LoadImage(book.volumeInfo.imageLinks.smallThumbnail)
+        .clickable {
+            navController.navigate(ReaderScreens.DetailScreen.name + "/${book.id}")
+        }) {
+
+        val smallImage = if(book.volumeInfo.imageLinks == null) ""
+            else  book.volumeInfo.imageLinks.smallThumbnail
+
+        LoadImage(null, smallImage)
         Column(modifier = Modifier.padding(start = 8.dp)) {
             Text(book.volumeInfo.title, style = MaterialTheme.typography.h6, overflow = TextOverflow.Ellipsis)
             Text("Author(s): ${book.volumeInfo.authors}", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)

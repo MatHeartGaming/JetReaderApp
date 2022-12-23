@@ -338,7 +338,8 @@ fun ListCard(
 }
 
 @Composable
-fun LoadImage(url : String = "https://www.sperling.it/content/uploads/2022/09/978882007444HIG.JPG") {
+fun LoadImage(modifier: Modifier? = null,
+              url : String = "https://www.sperling.it/content/uploads/2022/09/978882007444HIG.JPG") {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
@@ -347,10 +348,11 @@ fun LoadImage(url : String = "https://www.sperling.it/content/uploads/2022/09/97
         placeholder = painterResource(R.drawable.ic_launcher_background),
         contentDescription = "Book Image",
         contentScale = ContentScale.Fit,
-        modifier = Modifier
-            .clip(CircleShape)
-            .height(140.dp)
-            .width(100.dp)
-            .padding(4.dp)
+        modifier = modifier
+            ?: Modifier
+                .clip(CircleShape)
+                .height(140.dp)
+                .width(100.dp)
+                .padding(4.dp)
     )
 }
