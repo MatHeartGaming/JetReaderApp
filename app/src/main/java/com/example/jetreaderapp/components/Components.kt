@@ -238,7 +238,7 @@ fun FabContent(onTap: () -> Unit) {
 }
 
 @Composable
-fun BookRating(score: Double = 4.5) {
+fun BookRating(score: Float = 4.5f) {
     Surface(modifier = Modifier
         .height(70.dp)
         .padding(4.dp),
@@ -319,7 +319,7 @@ fun ListCard(
                         tint = Color.Black,
                         modifier = Modifier.padding(bottom = 16.dp))
 
-                    BookRating(score = 3.5)
+                    BookRating(score = book.rating!!)
                 }
             }
 
@@ -334,10 +334,15 @@ fun ListCard(
 
             Spacer(Modifier.fillMaxHeight(0.15f))
 
+            val isReading = book.startedReading != null
+            val isStartedReading = remember(isReading){
+                mutableStateOf(isReading)
+            }
+
             Row(horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.Bottom) {
                 Spacer(modifier = Modifier.fillMaxWidth(0.6f))
-                RoundedButton(label = "Reading", radius = 70)
+                RoundedButton(label = if(isStartedReading.value) "Reading" else "Not Started", radius = 70)
             }
         }
     }
@@ -390,7 +395,7 @@ fun RatingBar(
     ) {
         for (i in 1..5) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_star_background),
+                painter = painterResource(id = R.drawable.ic_star_foreground),
                 contentDescription = "star",
                 modifier = modifier
                     .width(size)

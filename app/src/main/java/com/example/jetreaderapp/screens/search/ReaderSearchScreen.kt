@@ -10,12 +10,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
@@ -130,6 +132,42 @@ fun BookItem(book: Item, navController: NavHostController) {
             Text("Author(s): ${book.volumeInfo.authors}", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
             Text("Date: ${book.volumeInfo.publishedDate}", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
             Text("Category: ${book.volumeInfo.categories}", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
+        }
+    }
+}
+
+@Composable
+fun BookItem(book: MBook, navController: NavHostController) {
+    Row(modifier = Modifier
+        .padding(4.dp)
+        .height(100.dp)
+        .fillMaxWidth()
+        .clickable {
+            navController.navigate(ReaderScreens.DetailScreen.name + "/${book.id}")
+        }) {
+
+        val smallImage = if(book.photoUrl == null) ""
+        else  book.photoUrl
+
+        LoadImage(null, smallImage!!)
+        Column(modifier = Modifier.padding(start = 8.dp)) {
+            Row {
+                book.title?.let { Text(it, style = MaterialTheme.typography.h6, overflow = TextOverflow.Ellipsis) }
+                if(book.rating!! >= 4) {
+                    Spacer(Modifier.fillMaxWidth(0.8f))
+                    Icon(imageVector = Icons.Default.ThumbUp, contentDescription = "Liked", tint = Color.Green.copy(0.5f))
+                }
+            }
+            Text("Author(s): ${book.authors}", fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
+            Text("Started: ${book.startedReading}",
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                overflow = TextOverflow.Clip,
+                softWrap = true
+                )
+            Text("Finished: ${book.finishedReading}",
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                overflow = TextOverflow.Clip,
+                softWrap = true)
         }
     }
 }

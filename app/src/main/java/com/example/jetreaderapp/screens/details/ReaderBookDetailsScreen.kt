@@ -119,7 +119,7 @@ fun ShowBookDetails(bookInfo: Resource<Item>, navController: NavHostController) 
             RoundedButton("Save") {
                 // Save this book to Firestore FB
                 val book = MBook(title = bookData.title,
-                    authors = bookData.authors.toString(),
+                    authors = if(bookData.authors.isNullOrEmpty()) "" else bookData.authors.toString(),
                     description = bookData.description,
                     categories = bookData.categories.toString(),
                     notes = "",
