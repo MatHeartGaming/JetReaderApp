@@ -1,6 +1,7 @@
 package com.example.jetreaderapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,12 +11,14 @@ import androidx.navigation.navArgument
 import com.example.jetreaderapp.screens.ReaderSplashScreen
 import com.example.jetreaderapp.screens.details.BookDetailsScreen
 import com.example.jetreaderapp.screens.home.Home
+import com.example.jetreaderapp.screens.home.HomeScreenViewModel
 import com.example.jetreaderapp.screens.login.ReaderLoginScreen
-import com.example.jetreaderapp.screens.search.BookSearchViewModel
 import com.example.jetreaderapp.screens.search.BooksSearchViewModel
 import com.example.jetreaderapp.screens.search.ReaderSearchScreen
 import com.example.jetreaderapp.screens.stats.ReaderStatsScreen
+import com.example.jetreaderapp.screens.update.BookUpdateScreen
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReaderNavigation() {
     val navController = rememberNavController()
@@ -24,7 +27,8 @@ fun ReaderNavigation() {
             ReaderSplashScreen(navController = navController)
         }
         composable(route = ReaderScreens.ReaderHomeScreen.name) {
-            Home(navController = navController)
+            val homeViewModel = hiltViewModel<HomeScreenViewModel>()
+            Home(navController = navController, viewModel = homeViewModel)
         }
         composable(route = ReaderScreens.LoginScreen.name) {
             ReaderLoginScreen(navController = navController)
@@ -44,6 +48,18 @@ fun ReaderNavigation() {
         }
         composable(route = ReaderScreens.ReaderStatsScreen.name) {
             ReaderStatsScreen(navController = navController)
+        }
+
+        val updateName = ReaderScreens.UpdateScreen.name
+        composable("$updateName/{bookItemId}",
+            arguments = listOf(navArgument("bookItemId") {
+                type = NavType.StringType
+            })) { navBackStackEntry ->
+
+            navBackStackEntry.arguments?.getString("bookItemId").let {
+                BookUpdateScreen(navController = navController, bookItemId = it.toString())
+            }
+
         }
     }
 
